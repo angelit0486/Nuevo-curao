@@ -1,0 +1,73 @@
+{
+  "name": "Content Agency — Drive → Brief → Aprobación (PLANTILLA, INACTIVA)",
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "notes": "Plantilla. Importar en n8n (Workflows > Import from file). Reemplazar REEMPLAZAR_*. Credenciales se crean en n8n (Google Drive OAuth2, Google Sheets OAuth2, Header Auth para Anthropic). NO contiene secretos. NO publica en Instagram: solo genera briefs y los deja en estado PENDIENTE_APROBACION.",
+  "nodes": [
+    {
+      "id": "1", "name": "Nuevo material en Drive", "type": "n8n-nodes-base.googleDriveTrigger", "typeVersion": 1,
+      "position": [0, 0],
+      "parameters": {
+        "pollTimes": { "item": [{ "mode": "everyHour" }] },
+        "triggerOn": "specificFolder",
+        "folderToWatch": { "__rl": true, "mode": "id", "value": "REEMPLAZAR_ID_CARPETA_01_BRUTOS" },
+        "event": "fileCreated"
+      },
+      "credentials": { "googleDriveOAuth2Api": { "name": "Google Drive — Agencia" } }
+    },
+    {
+      "id": "2", "name": "Preparar contexto", "type": "n8n-nodes-base.set", "typeVersion": 3.4,
+      "position": [240, 0],
+      "parameters": {
+        "assignments": { "assignments": [
+          { "id": "a1", "name": "archivo", "type": "string", "value": "={{ $json.name }}" },
+          { "id": "a2", "name": "enlace", "type": "string", "value": "={{ $json.webViewLink }}" },
+          { "id": "a3", "name": "marca", "type": "string", "value": "REEMPLAZAR_MARCA" }
+        ] }
+      }
+    },
+    {
+      "id": "3", "name": "Claude — generar brief", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2,
+      "position": [480, 0],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": { "parameters": [
+          { "name": "anthropic-version", "value": "2023-06-01" },
+          { "name": "content-type", "value": "application/json" }
+        ] },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: 'claude-sonnet-5-5', max_tokens: 2000, system: 'Eres content-producer de Claude Content Agency. Genera un BRIEF CREATIVO en Markdown (objetivo, público, mensaje único, 3 hooks, formato, CTA, copy borrador, checklist). Marca supuestos con [SUPUESTO]. No inventes precios ni testimonios.', messages: [{ role: 'user', content: 'Marca: ' + $json.marca + '. Nuevo material subido: ' + $json.archivo + ' (' + $json.enlace + '). Propón la pieza de Instagram más adecuada.' }] }) }}"
+      },
+      "credentials": { "httpHeaderAuth": { "name": "Anthropic API (x-api-key)" } }
+    },
+    {
+      "id": "4", "name": "Registrar en tablero (Sheets)", "type": "n8n-nodes-base.googleSheets", "typeVersion": 4.5,
+      "position": [720, 0],
+      "parameters": {
+        "operation": "append",
+        "documentId": { "__rl": true, "mode": "id", "value": "REEMPLAZAR_ID_SHEET_TABLERO" },
+        "sheetName": { "__rl": true, "mode": "name", "value": "Producción" },
+        "columns": { "mappingMode": "defineBelow", "value": {
+          "Fecha": "={{ $now.toISO() }}",
+          "Marca": "={{ $('Preparar contexto').item.json.marca }}",
+          "Material": "={{ $('Preparar contexto').item.json.enlace }}",
+          "Brief": "={{ $json.content[0].text }}",
+          "Estado": "PENDIENTE_APROBACION",
+          "Aprobado por": "",
+          "Fecha aprobación": ""
+        } }
+      },
+      "credentials": { "googleSheetsOAuth2Api": { "name": "Google Sheets — Agencia" } }
+    }
+  ],
+  "connections": {
+    "Nuevo material en Drive": { "main": [[{ "node": "Preparar contexto", "type": "main", "index": 0 }]] },
+    "Preparar contexto": { "main": [[{ "node": "Claude — generar brief", "type": "main", "index": 0 }]] },
+    "Claude — generar brief": { "main": [[{ "node": "Registrar en tablero (Sheets)", "type": "main", "index": 0 }]] }
+  }
+}

@@ -72,3 +72,12 @@ Matiz clave citado por miembros del comité: la mayoría de los estudios evaluar
 | La reforma a los artículos 4º y 5º constitucionales publicada el **17/01/2025** prohíbe los vapeadores y sistemas electrónicos análogos. | SCJN, misma sinopsis |
 | Desde 2021 existe un reglamento de uso medicinal. Los medicamentos de cannabis requieren receta, y su publicidad **solo puede dirigirse a profesionales de la salud** (art. 77). | DOF, Reglamento de 2021: https://sidof.segob.gob.mx/notas/docFuente/5609709 |
 | El Congreso **aún no** ha aprobado una regulación integral del uso adulto. | EFE, 11/09/2026 |
+
+### Concentrados (wax) — verificado 2026-11-26
+| Dato | Fuente |
+|---|---|
+| Los concentrados con solvente promedian 54–69% de THC, con muestras de más de 80%; la flor decomisada promedia poco más de 15%. Una sola inhalación entrega toda la dosis. | NIDA, *Marijuana Concentrates* (2020): https://nida.nih.gov/sites/default/files/df-marijuana-concentrates.pdf |
+| Un estudio encontró contaminación en 80% de las muestras de concentrados analizadas (pesticidas y solventes residuales). | NIDA (2020), mismo documento |
+| La extracción casera con butano ha causado incendios, explosiones y quemaduras graves. | NIDA (2020), mismo documento |
+| El uso diario de cannabis de alta potencia (THC ≥10%) se asoció con 4.8 veces más probabilidad de trastorno psicótico frente a no usar (OR ajustado 4.8, IC 2.5–6.3). | Di Forti et al., *The Lancet Psychiatry* (2019): https://pubmed.ncbi.nlm.nih.gov/30902669/ |
+| Brote EVALI en EE. UU.: 2,807 hospitalizados o muertes y 68 muertes (al 18/02/2020). Ligado sobre todo a productos de vapeo con THC de fuentes informales; la vitamina E acetato fue la principal causa identificada. | CDC (archivo), 25/02/2020: https://archive.cdc.gov/www_cdc_gov/tobacco/basic_information/e-cigarettes/severe-lung-disease.html |
